@@ -1,18 +1,15 @@
 defmodule Testo do
-  @moduledoc """
-  Documentation for `Testo`.
-  """
+  use Application
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    # List all child processes to be supervised
+    children = [
+      {Plug.Cowboy, scheme: :http, plug: Testo.Router, port: 4040}
+    ]
 
-  ## Examples
-
-      iex> Testo.hello()
-      :world
-
-  """
-  def hello do
-    :world
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: MyApp.Supervisor]
+    Supervisor.start_link(children, opts)
   end
 end
